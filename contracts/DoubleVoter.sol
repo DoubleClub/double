@@ -13,9 +13,7 @@ contract DoubleVoter is Initializable, OwnableUpgradeable {
     uint256 public tokenID;
 
     IBaseV1Voter public dddxVoter;
-
     ITokenLocker public tokenLocker;
-//    IDouPartners public douPartners;
     address public veDepositor;
 
     uint256 constant WEEK = 86400 * 7;
@@ -98,12 +96,10 @@ contract DoubleVoter is Initializable, OwnableUpgradeable {
 
     function setAddresses(
         ITokenLocker _tokenLocker,
-//        IDouPartners _douPartners,
         address _veDepositor,
         address[2] calldata _fixedVotePools
     ) external onlyOwner {
         tokenLocker = _tokenLocker;
-//        douPartners = _douPartners;
         veDepositor = _veDepositor;
         startTime = _tokenLocker.startTime();
 
@@ -322,29 +318,6 @@ contract DoubleVoter is Initializable, OwnableUpgradeable {
         emit SubmittedVote(msg.sender, pools, weights);
         return true;
     }
-
-    /**
-        @notice Submit pool addresses for protection from negative votes
-        @dev Only available to early partners
-        @param _pools Addresses of protected pools
-     */
-//    function setPoolProtection(address[2] calldata _pools) external {
-//        require(douPartners.isEarlyPartner(msg.sender), "Only early partners");
-//        ProtectionData storage data = poolProtectionData[msg.sender];
-//        require(block.timestamp - 86400 * 15 > data.lastUpdate, "Can only modify every 15 days");
-//
-//        for (uint i = 0; i < 2; i++) {
-//            (address removed, address added) = (data.pools[i], _pools[i]);
-//            if (removed != address(0)) poolProtectionCount[removed] -= 1;
-//            if (added != address(0)) poolProtectionCount[added] += 1;
-//        }
-//
-//        if (_pools[0] == address(0) && _pools[1] == address(0)) data.lastUpdate = 0;
-//        else data.lastUpdate = uint40(block.timestamp);
-//
-//        emit PoolProtectionSet(_pools[0], _pools[1], data.lastUpdate);
-//        data.pools = _pools;
-//    }
 
     function _currentVotes() internal view returns (
         address[] memory pools,
